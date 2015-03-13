@@ -1,0 +1,11 @@
+defaults: &defaults
+  adapter: sqlite3
+  timeout: 300
+
+test:
+  blue:
+    <<: *defaults
+    database: ".db/blue_test.sqlite3"
+  green:
+    <<: *defaults
+    database: ".db/green_test.sqlite3"
