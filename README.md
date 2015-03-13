@@ -1,5 +1,7 @@
 # Kamome
 
+https://circleci.com/gh/t1732/kamome.svg?style=shield&circle-token=fdf9c64cff4f286a7b20f12b77ed4779c2d06425
+
 ## Installation
 
 Add this line to your application's Gemfile:
