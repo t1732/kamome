@@ -59,7 +59,7 @@ module Kamome
   private
 
   def transaction_target_models(target_key)
-    Array.wrap(target_key).collect{|v| Ship.checkout(v).proxy_model }
+    Array.wrap(target_key).collect{|v| Ship.unload(v).proxy_model }
   end
 
   def nested_transaction(models, &block)
