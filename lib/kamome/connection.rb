@@ -17,7 +17,7 @@ module Kamome
         if kamome_enable?
           target_key = Kamome.anchor_key || Kamome.target
           raise TargetNotFound if target_key.blank?
-          ProxyStation.checkout(target_key).connection
+          Ship.unload(target_key).connection
         else
           connection_without_kamome
         end

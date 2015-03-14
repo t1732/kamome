@@ -5,11 +5,11 @@ require 'yaml'
 
 require_relative "kamome/version"
 require_relative "kamome/config"
-require_relative "kamome/connection"
 require_relative "kamome/errors"
 require_relative "kamome/model"
+require_relative "kamome/connection"
+require_relative "kamome/ship"
 require_relative "kamome/proxy"
-require_relative "kamome/proxy_station"
 require_relative "kamome/railtie" if defined?(Rails)
 
 module Kamome
@@ -59,7 +59,7 @@ module Kamome
   private
 
   def transaction_target_models(target_key)
-    Array.wrap(target_key).collect{|v| ProxyStation.checkout(v).proxy_model }
+    Array.wrap(target_key).collect{|v| Ship.checkout(v).proxy_model }
   end
 
   def nested_transaction(models, &block)
