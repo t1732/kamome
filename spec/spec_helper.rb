@@ -12,19 +12,20 @@ end
 ActiveRecord::Base.establish_connection(:blue)
 ActiveRecord::Schema.define do
   create_table :users, force: true do |t|
-    t.string :name
+    t.string :name, null: false
   end
 end
 ActiveRecord::Base.establish_connection(:green)
 ActiveRecord::Schema.define do
   create_table :users, force: true do |t|
-    t.string :name
+    t.string :name, null: false
   end
 end
 
 ActiveRecord::Base.send(:include, Kamome::Model)
 class User < ActiveRecord::Base
   kamome
+  validates :name, presence: true
 end
 
 RSpec.configure do |config|

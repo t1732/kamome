@@ -79,13 +79,13 @@ describe Kamome do
         Kamome.target = :blue
         begin
           User.transaction do
-            User.create!
             Kamome.anchor(:green) do
-              User.create!
+              User.create!(name: 'green')
             end
-            raise StandardError, "Rollback!"
+            User.create!(name: 'blue')
+            User.create!
           end
-        rescue StandardError
+        rescue ActiveRecord::RecordInvalid
         end
       end
 
@@ -95,7 +95,7 @@ describe Kamome do
         end
 
         it "=green" do
-          Kamome.anchor(:green) { expect(model.count).not_to be 0 }
+          Kamome.anchor(:green) { expect(model.count).to be 1 }
         end
       end
     end
@@ -105,13 +105,13 @@ describe Kamome do
         Kamome.target = :blue
         begin
           Kamome.transaction(:blue, :green) do
-            User.create!
             Kamome.anchor(:green) do
-              User.create!
+              User.create!(name: 'green')
             end
-            raise StandardError, "Rollback!"
+            User.create!(name: 'blue')
+            User.create!
           end
-        rescue StandardError
+        rescue ActiveRecord::RecordInvalid
         end
       end
 
@@ -131,13 +131,13 @@ describe Kamome do
         Kamome.target = :blue
         begin
           Kamome.full_transaction do
-            User.create!
             Kamome.anchor(:green) do
-              User.create!
+              User.create!(name: 'green')
             end
-            raise StandardError, "Rollback!"
+            User.create!(name: 'blue')
+            User.create!
           end
-        rescue StandardError
+        rescue ActiveRecord::RecordInvalid
         end
       end
 
