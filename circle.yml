@@ -5,10 +5,10 @@ machine:
 ## Customize dependencies
 dependencies:
   pre:
-    - gem install bundler --pre
+    - gem install bundler
 
   override:
-    - bundle install -j4
+    - bundle install --path=.bundle -j4
 
 ## Customize test commands
 test:
