@@ -8,7 +8,6 @@ module Kamome
 
     initializer "kamome.configure" do
       Kamome.configure do |config|
-        config.thread_target_key = 'kamome.target'
         config.config_path = Rails.root.join("config/kamome.yml")
       end
     end

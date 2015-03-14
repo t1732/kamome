@@ -2,13 +2,12 @@
 #
 #   Rails.application.config.to_prepare do
 #     Kamome.configure do |config|
-#       config.thread_target_key = 'target_key'
 #       config.config_path = Rails.root.join("config/kamome.yml").expand_path
 #     end
 #   end
 module Kamome
   class Config
-    attr_accessor :thread_target_key, :config_path, :database_config
+    attr_accessor :config_path, :database_config
 
     def loading
       if File.exist?(config_path)

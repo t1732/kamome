@@ -37,11 +37,11 @@ module Kamome
   end
 
   def target=(target_key)
-    Thread.current[Kamome.config.thread_target_key] = target_key
+    Thread.current['kamome.target'] = target_key
   end
 
   def target
-    Thread.current[Kamome.config.thread_target_key]
+    Thread.current['kamome.target']
   end
 
   # 現在のtarget、もしくは指定したtarget_keyに対してtrasactionする

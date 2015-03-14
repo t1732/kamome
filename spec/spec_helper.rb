@@ -6,7 +6,6 @@ ActiveRecord::Base.configurations = YAML.load_file(config_path)["test"]
 ActiveRecord::Migration.verbose = false
 
 Kamome.configure do |config|
-  config.thread_target_key = 'db_key'
   config.config_path = config_path
 end
 
