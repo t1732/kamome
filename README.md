@@ -20,6 +20,8 @@ bundle install
 
 Rails >= 4.2
 
+### Configuration
+
 * example database.yml
 
 ```yaml
@@ -68,11 +70,13 @@ test:
     database: kamome_green_test
 ```
 
+### Models
+
 ```ruby
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
-      t.string :name
+      t.string :name, null: false
       t.timestamps
     end
   end
@@ -82,15 +86,97 @@ end
 ```ruby
 class User < ActiveRecord::Base
   kamome
+  validats :name, presence: true
 end
 ```
 
-```
+```ruby
 Kamome.target = :blue
 User.create!(name: "blue")
-
 Kamome.target = :green
 User.create!(name: "green")
+```
+
+### Switched temporarily
+
+```ruby
+Kamome.target = :blue
+User.create!(name: "blue")
+Kamome.anchor(:green) do
+  User.create!(name: "green")
+end
+```
+
+## Targetting Transaction
+
+The default transaction is directed to a database that is set in database.yml
+
+```ruby
+Kamome.target = :blue
+ActiveRecord::Base.transaction do
+  User.create!(name: 'blue')
+  User.create! # validation error
+end
+User.count #=> 1
+```
+
+```ruby
+Kamome.target = :blue
+Kamome.transaction do
+  User.create!(name: 'blue')
+  User.create!
+end
+User.count #=> 0
+```
+
+transaction of default kamome is directed to a database that is specified in the Kamome.target
+
+```ruby
+Kamome.target = :blue
+Kamome.transaction do
+  Kamome.anchor(:green) do
+    User.create!(name: 'green')
+    User.create!
+  end
+end
+Kamome.target = :green
+User.count #=> 1
+```
+
+```ruby
+Kamome.target = :blue
+Kamome.transaction(:blue, :green) do
+  Kamome.anchor(:green) do
+    User.create!(name: "green")
+  end
+  User.create!(name: "blue")
+  User.create! # validation error
+end
+User.count #=> 1
+Kamome.target = :green
+User.count #=> 0
+```
+
+or
+
+```ruby
+Kamome.full_transaction do
+  # transaction kamome.yml all targets
+end
+```
+
+## Customize
+
+### config path
+
+* sample config/initializers/kamome.rb
+
+```ruby
+Rails.application.config.to_prepare do
+  Kamome.configure do |config|
+    config.config_path = "/tmp/kamome.yml"
+  end
+end
 ```
 
 ## Contributing
