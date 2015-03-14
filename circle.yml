@@ -1,3 +1,16 @@
 machine:
   ruby:
     version: 2.2.0
+
+## Customize dependencies
+dependencies:
+  pre:
+    - gem install bundler --pre
+
+  override:
+    - bundle install -j4
+
+## Customize test commands
+test:
+  override:
+    - rake
