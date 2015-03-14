@@ -10,7 +10,12 @@ dependencies:
   override:
     - bundle install --path=.bundle -j4
 
+## Customize database setup
+database:
+  override:
+    - echo 'skip database setup.'
+
 ## Customize test commands
 test:
   override:
-    - rake
+    - bundle exec rake
