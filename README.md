@@ -97,14 +97,28 @@ Kamome.target = :green
 User.create!(name: "green")
 ```
 
-### Switched temporarily
+### Temporarily change target
 
 ```ruby
-Kamome.target = :blue
-User.create!(name: "blue")
-Kamome.anchor(:green) do
-  User.create!(name: "green")
+Kamome.anchor(:blue) do
+  Kamome.target                 # => :blue
+  Kamome.anchor(:green) do
+    Kamome.target               # => :green
+  end
+  Kamome.target                 # => :blue
 end
+```
+
+```ruby
+Kamome.anchor(:blue) do
+  User.create!(name: 'blue')
+  Kamome.anchor(:green) do
+    User.create!(name: 'green')
+  end
+  User.create!(name: 'blue')
+end
+Kamome.anchor(:blue)  { User.count } # => 2
+Kamome.anchor(:green) { User.count } # => 1
 ```
 
 ## Targetting Transaction
