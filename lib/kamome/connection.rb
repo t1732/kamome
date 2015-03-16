@@ -15,9 +15,8 @@ module Kamome
 
       def connection_with_kamome
         if kamome_enable?
-          target_key = Kamome.anchor_key || Kamome.target
-          raise TargetNotFound if target_key.blank?
-          Ship.unload(target_key).connection
+          raise TargetNotFound if Kamome.target.blank?
+          Ship.unload(Kamome.target).connection
         else
           connection_without_kamome
         end
