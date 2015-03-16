@@ -2,7 +2,7 @@ module Kamome
   class Proxy
     def initialize(target_key)
       @target_key = target_key
-      @constant_name = @target_key.to_s.singularize.camelcase
+      @model_name = "#{@target_key}_proxy".to_s.classify
       create_proxy_model
     end
 
@@ -11,14 +11,14 @@ module Kamome
     end
 
     def proxy_model
-      self.class.const_get(@constant_name)
+      self.class.const_get(@model_name)
     end
 
     def create_proxy_model
-      model = Class.new(ActiveRecord::Base)
-      self.class.const_set @constant_name, model
-      model.establish_connection(Kamome.config.database_config.fetch(@target_key))
-      model
+      Class.new(ActiveRecord::Base).tap do |model|
+        self.class.const_set @model_name, model
+        model.establish_connection(Kamome.config.database_config.fetch(@target_key))
+      end
     end
   end
 end
