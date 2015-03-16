@@ -2,7 +2,7 @@ module Kamome
   class Proxy
     def initialize(target_key)
       @target_key = target_key
-      @model_name = "#{@target_key}_proxy".to_s.classify
+      @model_name = "#{@target_key}_connection_model".to_s.classify
       create_proxy_model
     end
 
