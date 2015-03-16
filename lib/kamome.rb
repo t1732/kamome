@@ -17,25 +17,28 @@ require_relative "kamome/railtie" if defined?(Rails)
 module Kamome
   extend self
 
-  # 強制的に接続先を切り替える
+  # 一時的に接続先を切り替える
   #
-  #  Profile.create!    # create blue db
-  #  Kamome.anchor('green') do
-  #    Profile.create!  # create green db
-  #  end
+  #   Kamome.target = :blue                   # => :blue
+  #   Kamome.anchor(:green) { Kamome.target } # => :green
+  #   Kamome.target                           # => :blue
+  #
+  # 入れ子にできる
+  #
+  #   Kamome.anchor(:blue) do
+  #     Kamome.target                 # => :blue
+  #     Kamome.anchor(:green) do
+  #       Kamome.target               # => :green
+  #     end
+  #     Kamome.target                 # => :blue
+  #   end
+  #
   def anchor(target_key, &block)
-    self.anchor_key = target_key
+    stack.push(target)
+    self.target = target_key
     yield
   ensure
-    self.anchor_key = nil
-  end
-
-  def anchor_key=(target_key)
-    Thread.current['kamome.anchor'] = target_key
-  end
-
-  def anchor_key
-    Thread.current['kamome.anchor']
+    self.target = stack.pop
   end
 
   def target=(target_key)
@@ -44,6 +47,10 @@ module Kamome
 
   def target
     Thread.current['kamome.target']
+  end
+
+  def stack
+    Thread.current['kamome.stack'] ||= []
   end
 
   # 現在のtarget、もしくは指定したtarget_keyに対してtrasactionする
