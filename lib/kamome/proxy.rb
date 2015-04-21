@@ -16,7 +16,7 @@ module Kamome
 
     def create_proxy_model
       Class.new(ActiveRecord::Base).tap do |model|
-        self.class.const_set @model_name, model
+        self.class.const_set(@model_name, model)
         model.establish_connection(Kamome.config.database_config.fetch(@target_key))
       end
     end
