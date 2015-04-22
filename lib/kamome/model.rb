@@ -1,7 +1,5 @@
 module Kamome
-  module Model
-    extend ActiveSupport::Concern
-
+  concern :Model do
     class_methods do
       def kamome
         include Connection

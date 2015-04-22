@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'active_support/concern'
 require 'active_support/core_ext/hash/indifferent_access'
-# require 'active_support/core_ext/kernel/concern'
+require 'active_support/core_ext/kernel/concern'
 require 'active_record'
 require 'yaml'
 
@@ -36,12 +36,17 @@ module Kamome
   def anchor(target_key, &block)
     stack.push(target)
     self.target = target_key
-    yield
+    if logger
+      logger.tagged(target) { yield }
+    else
+      yield
+    end
   ensure
     self.target = stack.pop
   end
 
   def target=(target_key)
+    logger.info "Kamome: #{target.inspect} => #{target_key.inspect}" if logger
     Thread.current['kamome.target'] = target_key
   end
 
@@ -63,6 +68,10 @@ module Kamome
   # 全てのdatabaseでトランザクションを実行する
   def full_transaction(&block)
     nested_transaction(transaction_target_models(Kamome.config.shard_names), &block)
+  end
+
+  def logger
+    ActiveRecord::Base.logger
   end
 
   private

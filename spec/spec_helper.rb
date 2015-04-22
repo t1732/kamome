@@ -4,6 +4,7 @@ require 'kamome'
 config_path = File.join(File.dirname(__FILE__), "./config/kamome.yml")
 ActiveRecord::Base.configurations = YAML.load_file(config_path)["test"]
 ActiveRecord::Migration.verbose = false
+# ActiveRecord::Base.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
 
 Kamome.configure do |config|
   config.config_path = config_path
