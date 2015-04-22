@@ -6,8 +6,8 @@ module Kamome
   end
 
   class TargetNotFound < BaseError
-    def initialize
-      super("Kamome.target has not been set.")
+    def initialize(message)
+      super("Kamome.target has not been set. [#{message}]")
     end
   end
 

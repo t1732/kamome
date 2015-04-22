@@ -48,7 +48,7 @@ Kamome.anchor(:blue) do
   end
 end
 # >>    (0.1ms)  begin transaction
-# >>   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >>    (0.7ms)  commit transaction
+# >>   SQL (0.3ms)  INSERT INTO "users" DEFAULT VALUES
+# >>    (1.0ms)  commit transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >>    (0.2ms)  SELECT COUNT(*) FROM "users"

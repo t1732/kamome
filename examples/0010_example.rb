@@ -55,7 +55,7 @@ User.kamome
 User.kamome_enable?             # => true
 
 # target を設定せずに実行するとエラーになる
-User.count rescue $!            # => #<Kamome::TargetNotFound: [31mKamome.target has not been set.[0m>
+User.count rescue $!            # => #<Kamome::TargetNotFound: [31mKamome.target has not been set. [User.connection][0m>
 
 # 基本的な使い方 (でも target はグローバル変数風なので、できれば anchor を使った方がいい)
 Kamome.target = :blue
@@ -100,20 +100,20 @@ Kamome.anchor(:blue)  { User.count } # => 2
 Kamome.anchor(:green) { User.count } # => 1
 # >>    (0.0ms)  begin transaction
 # >>   SQL (0.3ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "blue"]]
-# >>    (1.0ms)  commit transaction
+# >>    (0.9ms)  commit transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >>    (0.2ms)  begin transaction
 # >>   SQL (0.2ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "green"]]
-# >>    (1.0ms)  commit transaction
-# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
-# >>    (0.1ms)  begin transaction
-# >>   SQL (0.3ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "blue"]]
 # >>    (0.9ms)  commit transaction
+# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >>    (0.0ms)  begin transaction
+# >>   SQL (0.2ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "blue"]]
+# >>    (0.9ms)  commit transaction
+# >>    (0.1ms)  begin transaction
 # >>   SQL (0.2ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "green"]]
-# >>    (0.8ms)  commit transaction
+# >>    (0.7ms)  commit transaction
 # >>    (0.0ms)  begin transaction
-# >>   SQL (0.1ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "blue"]]
-# >>    (1.0ms)  commit transaction
+# >>   SQL (0.2ms)  INSERT INTO "users" ("name") VALUES (?)  [["name", "blue"]]
+# >>    (1.1ms)  commit transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"

@@ -56,7 +56,7 @@ module Kamome
   # 現在のtarget、もしくは指定したtarget_keyに対してtrasactionする
   def transaction(*args, &block)
     target_key = args.presence || target
-    raise TargetNotFound if target_key.nil?
+    raise TargetNotFound, "transaction" unless target_key
     nested_transaction(transaction_target_models(target_key), &block)
   end
 
