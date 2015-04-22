@@ -13,7 +13,7 @@ database_config = {
 }.with_indifferent_access
 
 begin
-  ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
+  ActiveRecord::Base.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
   ActiveSupport::LogSubscriber.colorize_logging = false
   ActiveRecord::Migration.verbose = false
   ActiveRecord::Base.configurations = database_config # migration を実行するため kamome 用の shard_names を環境と見なして設定
@@ -47,8 +47,12 @@ Kamome.anchor(:blue) do
     User.count                  # => 0
   end
 end
-# >>    (0.1ms)  begin transaction
-# >>   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >>    (0.7ms)  commit transaction
-# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
-# >>    (0.2ms)  SELECT COUNT(*) FROM "users"
+# >> Kamome: nil => :blue
+# >> [blue]    (0.1ms)  begin transaction
+# >> [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [blue]    (1.0ms)  commit transaction
+# >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "users"
+# >> [blue] Kamome: :blue => :green
+# >> [blue] [green]    (0.2ms)  SELECT COUNT(*) FROM "users"
+# >> [blue] Kamome: :green => :blue
+# >> Kamome: :blue => nil

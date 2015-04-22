@@ -1,26 +1,20 @@
 module Kamome
-  module Connection
-    extend ActiveSupport::Concern
-
+  concern :Connection do
     included do
-      class << self
-        alias_method_chain :connection, :kamome
-      end
+      singleton_class.prepend(ConnectionWrapper)
     end
 
     class_methods do
       def kamome_enable?
         true
       end
+    end
+  end
 
-      def connection_with_kamome
-        if kamome_enable?
-          raise TargetNotFound if Kamome.target.blank?
-          Ship.unload(Kamome.target).connection
-        else
-          connection_without_kamome
-        end
-      end
+  module ConnectionWrapper
+    def connection
+      raise TargetNotFound, "#{name}.#{__method__}" unless Kamome.target
+      Ship.unload(Kamome.target).connection
     end
   end
 end
