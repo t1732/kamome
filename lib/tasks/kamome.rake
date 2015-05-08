@@ -11,12 +11,16 @@ namespace :db do
 
   desc 'Creates shard databases.'
   task "create:kamome" => %w(environment load_kamome_config) do |t, args|
-    ActiveRecord::Tasks::DatabaseTasks.create_all
+    Kamome.config.shard_names.each do |name|
+      ActiveRecord::Tasks::DatabaseTasks.create_current name
+    end
   end
 
   desc 'Drops shard databases.'
   task "drop:kamome" => %w(environment load_kamome_config) do |t, args|
-    ActiveRecord::Tasks::DatabaseTasks.drop_all
+    Kamome.config.shard_names.each do |name|
+      ActiveRecord::Tasks::DatabaseTasks.drop_current name
+    end
   end
 
   desc "Migrate shards database (options: VERSION=x, VERBOSE=false, SCOPE=blog)."
