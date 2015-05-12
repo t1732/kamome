@@ -11,7 +11,7 @@ module Kamome
 
     def loading
       if File.exist?(config_path)
-        conf = YAML.load(File.read(config_path)).with_indifferent_access
+        conf = YAML.load(ERB.new(File.read(config_path)).result).with_indifferent_access
         self.database_config = conf[rails_env]
       else
         raise ConfigFileNotFound.new(config_path)

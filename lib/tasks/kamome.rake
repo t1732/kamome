@@ -3,8 +3,7 @@ require 'active_record'
 namespace :db do
   task :load_kamome_config do
     rails_env = ENV['RAILS_ENV'] || 'development'
-    config = YAML.load(File.read(Kamome.config.config_path))
-    ActiveRecord::Tasks::DatabaseTasks.database_configuration = config[rails_env]
+    ActiveRecord::Tasks::DatabaseTasks.database_configuration = Kamome.config.database_config
     ActiveRecord::Base.configurations       = ActiveRecord::Tasks::DatabaseTasks.database_configuration || {}
     ActiveRecord::Migrator.migrations_paths = ActiveRecord::Tasks::DatabaseTasks.migrations_paths
   end
