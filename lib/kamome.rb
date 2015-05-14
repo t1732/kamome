@@ -4,6 +4,7 @@ require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/kernel/concern'
 require 'active_record'
 require 'yaml'
+require 'erb'
 
 require_relative "kamome/version"
 require_relative "kamome/config"
