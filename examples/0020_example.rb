@@ -117,19 +117,19 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 
 # >> Kamome: nil => :blue
 # >> Kamome: :blue => :blue
-# >> [blue]    (0.1ms)  begin transaction
-# >> [blue]   SQL (0.3ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue]    (1.2ms)  commit transaction
+# >> [blue]    (0.0ms)  begin transaction
+# >> [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [blue]    (1.0ms)  commit transaction
 # >> [blue]    (0.0ms)  begin transaction
 # >> [blue]   SQL (0.3ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 1]]
-# >> [blue]    (1.0ms)  commit transaction
+# >> [blue]    (1.1ms)  commit transaction
 # >> Kamome: :blue => :blue
 # >> Kamome: :blue => :green
 # >> [green]    (0.0ms)  begin transaction
 # >> [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
 # >> [green]    (0.9ms)  commit transaction
 # >> [green]    (0.0ms)  begin transaction
-# >> [green]   SQL (0.3ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 2]]
+# >> [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 2]]
 # >> [green]    (1.1ms)  commit transaction
 # >> Kamome: :green => :blue
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
@@ -142,15 +142,15 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >>    (0.2ms)  begin transaction
 # >> Kamome: :blue => :blue
 # >> [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue]    (0.0ms)  begin transaction
+# >> [blue]    (0.1ms)  begin transaction
 # >> [blue]   SQL (0.3ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 3]]
-# >> [blue]    (1.0ms)  commit transaction
+# >> [blue]    (1.1ms)  commit transaction
 # >> Kamome: :blue => :blue
 # >> Kamome: :blue => :green
-# >> [green]   SQL (0.1ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [green]    (0.0ms)  begin transaction
+# >> [green]   SQL (0.0ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [green]    (0.1ms)  begin transaction
 # >> [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 4]]
-# >> [green]    (1.0ms)  commit transaction
+# >> [green]    (1.1ms)  commit transaction
 # >> Kamome: :green => :blue
 # >>    (0.3ms)  rollback transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
@@ -164,7 +164,7 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :blue => :blue
 # >> [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
 # >> [blue]    (0.0ms)  begin transaction
-# >> [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 3]]
+# >> [blue]   SQL (0.4ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 3]]
 # >> [blue]    (1.1ms)  commit transaction
 # >> Kamome: :blue => :blue
 # >> Kamome: :blue => :green
@@ -181,17 +181,17 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :blue => :green
 # >> [green]    (0.1ms)  SELECT COUNT(*) FROM "articles"
 # >> Kamome: :green => :blue
-# >>    (0.1ms)  begin transaction
+# >>    (0.0ms)  begin transaction
 # >> Kamome: :blue => :blue
 # >> [blue]    (0.2ms)  begin transaction
 # >> [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue]    (1.0ms)  commit transaction
+# >> [blue]    (0.9ms)  commit transaction
 # >> [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 3]]
 # >> Kamome: :blue => :blue
 # >> Kamome: :blue => :green
 # >> [green]    (0.0ms)  begin transaction
 # >> [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [green]    (0.5ms)  commit transaction
+# >> [green]    (1.0ms)  commit transaction
 # >> [green]    (0.0ms)  begin transaction
 # >> [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 4]]
 # >> [green]    (1.1ms)  commit transaction
@@ -204,20 +204,20 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :blue => :green
 # >> [green]    (0.1ms)  SELECT COUNT(*) FROM "articles"
 # >> Kamome: :green => :blue
-# >> [blue transaction]    (0.0ms)  begin transaction
+# >> [blue transaction]    (0.1ms)  begin transaction
 # >> [blue transaction] Kamome: :blue => :blue
-# >> [blue transaction] [blue]    (0.1ms)  begin transaction
+# >> [blue transaction] [blue]    (0.2ms)  begin transaction
 # >> [blue transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [blue]    (0.9ms)  commit transaction
+# >> [blue transaction] [blue]    (1.0ms)  commit transaction
 # >> [blue transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 5]]
 # >> [blue transaction] Kamome: :blue => :blue
 # >> [blue transaction] Kamome: :blue => :green
 # >> [blue transaction] [green]    (0.0ms)  begin transaction
 # >> [blue transaction] [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [green]    (1.0ms)  commit transaction
+# >> [blue transaction] [green]    (0.7ms)  commit transaction
 # >> [blue transaction] [green]    (0.0ms)  begin transaction
 # >> [blue transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 6]]
-# >> [blue transaction] [green]    (1.1ms)  commit transaction
+# >> [blue transaction] [green]    (1.0ms)  commit transaction
 # >> [blue transaction] Kamome: :green => :blue
 # >> [blue transaction]    (0.3ms)  rollback transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
@@ -229,18 +229,18 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :green => :blue
 # >> [blue transaction]    (0.0ms)  begin transaction
 # >> [blue transaction] Kamome: :blue => :blue
-# >> [blue transaction] [blue]    (0.1ms)  begin transaction
+# >> [blue transaction] [blue]    (0.2ms)  begin transaction
 # >> [blue transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [blue]    (1.0ms)  commit transaction
+# >> [blue transaction] [blue]    (0.9ms)  commit transaction
 # >> [blue transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 7]]
 # >> [blue transaction] Kamome: :blue => :blue
 # >> [blue transaction] Kamome: :blue => :green
 # >> [blue transaction] [green]    (0.0ms)  begin transaction
 # >> [blue transaction] [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [green]    (0.8ms)  commit transaction
-# >> [blue transaction] [green]    (0.1ms)  begin transaction
+# >> [blue transaction] [green]    (1.1ms)  commit transaction
+# >> [blue transaction] [green]    (0.0ms)  begin transaction
 # >> [blue transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 8]]
-# >> [blue transaction] [green]    (1.0ms)  commit transaction
+# >> [blue transaction] [green]    (1.1ms)  commit transaction
 # >> [blue transaction] Kamome: :green => :blue
 # >> [blue transaction]    (0.3ms)  rollback transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
@@ -252,20 +252,43 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :green => :blue
 # >> [green transaction]    (0.0ms)  begin transaction
 # >> [green transaction] Kamome: :blue => :blue
-# >> [green transaction] [blue]    (0.1ms)  begin transaction
+# >> [green transaction] [blue]    (0.2ms)  begin transaction
 # >> [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [green transaction] [blue]    (1.0ms)  commit transaction
+# >> [green transaction] [blue]    (0.9ms)  commit transaction
 # >> [green transaction] [blue]    (0.0ms)  begin transaction
 # >> [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 9]]
-# >> [green transaction] [blue]    (1.0ms)  commit transaction
+# >> [green transaction] [blue]    (1.1ms)  commit transaction
 # >> [green transaction] Kamome: :blue => :blue
 # >> [green transaction] Kamome: :blue => :green
 # >> [green transaction] [green]    (0.0ms)  begin transaction
 # >> [green transaction] [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [green transaction] [green]    (0.5ms)  commit transaction
+# >> [green transaction] [green]    (0.9ms)  commit transaction
 # >> [green transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 10]]
 # >> [green transaction] Kamome: :green => :blue
-# >> [green transaction]    (0.3ms)  rollback transaction
+# >> [green transaction]    (0.4ms)  rollback transaction
+# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
+# >> Kamome: :blue => :blue
+# >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "articles"
+# >> Kamome: :blue => :blue
+# >> Kamome: :blue => :green
+# >> [green]    (0.1ms)  SELECT COUNT(*) FROM "articles"
+# >> Kamome: :green => :blue
+# >> [blue transaction]    (0.0ms)  begin transaction
+# >> [blue transaction] [green transaction]    (0.0ms)  begin transaction
+# >> [blue transaction] [green transaction] Kamome: :blue => :blue
+# >> [blue transaction] [green transaction] [blue]    (0.1ms)  begin transaction
+# >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [blue transaction] [green transaction] [blue]    (0.8ms)  commit transaction
+# >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 11]]
+# >> [blue transaction] [green transaction] Kamome: :blue => :blue
+# >> [blue transaction] [green transaction] Kamome: :blue => :green
+# >> [blue transaction] [green transaction] [green]    (0.0ms)  begin transaction
+# >> [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [blue transaction] [green transaction] [green]    (0.9ms)  commit transaction
+# >> [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 12]]
+# >> [blue transaction] [green transaction] Kamome: :green => :blue
+# >> [blue transaction] [green transaction]    (0.4ms)  rollback transaction
+# >> [blue transaction]    (0.3ms)  rollback transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >> Kamome: :blue => :blue
 # >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "articles"
@@ -279,29 +302,6 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> [blue transaction] [green transaction] [blue]    (0.2ms)  begin transaction
 # >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
 # >> [blue transaction] [green transaction] [blue]    (0.5ms)  commit transaction
-# >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 11]]
-# >> [blue transaction] [green transaction] Kamome: :blue => :blue
-# >> [blue transaction] [green transaction] Kamome: :blue => :green
-# >> [blue transaction] [green transaction] [green]    (0.0ms)  begin transaction
-# >> [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [green transaction] [green]    (1.0ms)  commit transaction
-# >> [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 12]]
-# >> [blue transaction] [green transaction] Kamome: :green => :blue
-# >> [blue transaction] [green transaction]    (0.4ms)  rollback transaction
-# >> [blue transaction]    (0.4ms)  rollback transaction
-# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
-# >> Kamome: :blue => :blue
-# >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "articles"
-# >> Kamome: :blue => :blue
-# >> Kamome: :blue => :green
-# >> [green]    (0.1ms)  SELECT COUNT(*) FROM "articles"
-# >> Kamome: :green => :blue
-# >> [blue transaction]    (0.0ms)  begin transaction
-# >> [blue transaction] [green transaction]    (0.0ms)  begin transaction
-# >> [blue transaction] [green transaction] Kamome: :blue => :blue
-# >> [blue transaction] [green transaction] [blue]    (0.2ms)  begin transaction
-# >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [blue transaction] [green transaction] [blue]    (0.9ms)  commit transaction
 # >> [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 13]]
 # >> [blue transaction] [green transaction] Kamome: :blue => :blue
 # >> [blue transaction] [green transaction] Kamome: :blue => :green
@@ -311,7 +311,7 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 14]]
 # >> [blue transaction] [green transaction] Kamome: :green => :blue
 # >> [blue transaction] [green transaction]    (0.4ms)  rollback transaction
-# >> [blue transaction]    (0.4ms)  rollback transaction
+# >> [blue transaction]    (0.3ms)  rollback transaction
 # >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >> Kamome: :blue => :blue
 # >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "articles"
@@ -319,21 +319,21 @@ Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 
 # >> Kamome: :blue => :green
 # >> [green]    (0.1ms)  SELECT COUNT(*) FROM "articles"
 # >> Kamome: :green => :blue
-# >> [master transaction]    (0.1ms)  begin transaction
-# >> [master transaction] [blue transaction]    (0.0ms)  begin transaction
-# >> [master transaction] [blue transaction] [green transaction]    (0.0ms)  begin transaction
-# >> [master transaction] [blue transaction] [green transaction] Kamome: :blue => :blue
-# >> [master transaction] [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [master transaction] [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 15]]
-# >> [master transaction] [blue transaction] [green transaction] Kamome: :blue => :blue
-# >> [master transaction] [blue transaction] [green transaction] Kamome: :blue => :green
-# >> [master transaction] [blue transaction] [green transaction] [green]   SQL (0.0ms)  INSERT INTO "users" DEFAULT VALUES
-# >> [master transaction] [blue transaction] [green transaction] [green]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 16]]
-# >> [master transaction] [blue transaction] [green transaction] Kamome: :green => :blue
-# >> [master transaction] [blue transaction] [green transaction]    (0.5ms)  rollback transaction
-# >> [master transaction] [blue transaction]    (0.5ms)  rollback transaction
-# >> [master transaction]    (0.5ms)  rollback transaction
-# >>    (0.2ms)  SELECT COUNT(*) FROM "users"
+# >> [default transaction]    (0.2ms)  begin transaction
+# >> [default transaction] [blue transaction]    (0.0ms)  begin transaction
+# >> [default transaction] [blue transaction] [green transaction]    (0.0ms)  begin transaction
+# >> [default transaction] [blue transaction] [green transaction] Kamome: :blue => :blue
+# >> [default transaction] [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [default transaction] [blue transaction] [green transaction] [blue]   SQL (0.2ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 15]]
+# >> [default transaction] [blue transaction] [green transaction] Kamome: :blue => :blue
+# >> [default transaction] [blue transaction] [green transaction] Kamome: :blue => :green
+# >> [default transaction] [blue transaction] [green transaction] [green]   SQL (0.0ms)  INSERT INTO "users" DEFAULT VALUES
+# >> [default transaction] [blue transaction] [green transaction] [green]   SQL (0.3ms)  INSERT INTO "articles" ("user_id") VALUES (?)  [["user_id", 16]]
+# >> [default transaction] [blue transaction] [green transaction] Kamome: :green => :blue
+# >> [default transaction] [blue transaction] [green transaction]    (0.6ms)  rollback transaction
+# >> [default transaction] [blue transaction]    (0.5ms)  rollback transaction
+# >> [default transaction]    (0.3ms)  rollback transaction
+# >>    (0.1ms)  SELECT COUNT(*) FROM "users"
 # >> Kamome: :blue => :blue
 # >> [blue]    (0.1ms)  SELECT COUNT(*) FROM "articles"
 # >> Kamome: :blue => :blue

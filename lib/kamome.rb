@@ -73,7 +73,7 @@ module Kamome
 
   # マスターを含めて全てのdatabaseでトランザクションを実行する
   def full_transaction(&block)
-    tagged("master transaction") do
+    tagged("default transaction") do
       ActiveRecord::Base.transaction do
         all_transaction(&block)
       end
