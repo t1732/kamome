@@ -66,13 +66,30 @@ module Kamome
     nested_transaction(transaction_target_models(target_key), &block)
   end
 
-  # 全てのdatabaseでトランザクションを実行する
+  # 水平分割用の全てのdatabaseでトランザクションを実行する
   def full_transaction(&block)
     nested_transaction(transaction_target_models(Kamome.config.shard_names), &block)
   end
 
+  # マスターを含めて全てのdatabaseでトランザクションを実行する
+  def all_transaction(&block)
+    tagged("master transaction") do
+      ActiveRecord::Base.transaction do
+        full_transaction(&block)
+      end
+    end
+  end
+
   def logger
     ActiveRecord::Base.logger
+  end
+
+  def tagged(tag)
+    if logger
+      logger.tagged(tag) { yield }
+    else
+      yield
+    end
   end
 
   private
@@ -84,8 +101,10 @@ module Kamome
   def nested_transaction(models, &block)
     return block.call if models.empty?
     model = models.shift
-    model.transaction do
-      nested_transaction(models, &block)
+    tagged("#{model.target_key} transaction") do
+      model.transaction do
+        nested_transaction(models, &block)
+      end
     end
   end
 end
