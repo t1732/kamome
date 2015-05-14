@@ -174,7 +174,7 @@ User.count #=> 0
 or
 
 ```ruby
-Kamome.full_transaction do
+Kamome.all_transaction do
   # transaction kamome.yml all targets
 end
 ```

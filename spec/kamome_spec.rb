@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Kamome do
-  let(:model) { User }
+  let(:model) { Article }
 
   before do
     Kamome.target = nil
@@ -17,8 +17,8 @@ describe Kamome do
 
   context "switch target" do
     before do
-      Kamome.anchor(:blue) { User.create!(name: 'blue') }
-      Kamome.anchor(:green) { User.create!(name: 'green') }
+      Kamome.anchor(:blue) { model.create!(name: 'blue') }
+      Kamome.anchor(:green) { model.create!(name: 'green') }
     end
 
     describe "=blue" do
@@ -72,11 +72,11 @@ describe Kamome do
     context "block targetting" do
       before do
         Kamome.anchor(:blue) do
-          User.create!(name: 'blue')
+          model.create!(name: 'blue')
           Kamome.anchor(:green) do
-            User.create!(name: 'green')
+            model.create!(name: 'green')
           end
-          User.create!(name: 'blue')
+          model.create!(name: 'blue')
         end
       end
 
@@ -105,12 +105,12 @@ describe Kamome do
       before do
         Kamome.target = :blue
         begin
-          User.transaction do
+          model.transaction do
             Kamome.anchor(:green) do
-              User.create!(name: 'green')
+              model.create!(name: 'green')
             end
-            User.create!(name: 'blue')
-            User.create!
+            model.create!(name: 'blue')
+            model.create!
           end
         rescue ActiveRecord::RecordInvalid
         end
@@ -133,10 +133,36 @@ describe Kamome do
         begin
           Kamome.transaction(:blue, :green) do
             Kamome.anchor(:green) do
-              User.create!(name: 'green')
+              model.create!(name: 'green')
             end
-            User.create!(name: 'blue')
-            User.create!
+            model.create!(name: 'blue')
+            model.create!
+          end
+        rescue ActiveRecord::RecordInvalid
+        end
+      end
+
+      describe "confirm record count" do
+        it "=blue" do
+          Kamome.anchor(:blue)  { expect(model.count).to be 0 }
+        end
+
+        it "=green" do
+          Kamome.anchor(:green) { expect(model.count).to be 0 }
+        end
+      end
+    end
+
+    describe "Kamome.all_transaction" do
+      before do
+        Kamome.target = :blue
+        begin
+          Kamome.all_transaction do
+            Kamome.anchor(:green) do
+              model.create!(name: 'green')
+            end
+            model.create!(name: 'blue')
+            model.create!
           end
         rescue ActiveRecord::RecordInvalid
         end
@@ -155,27 +181,20 @@ describe Kamome do
 
     describe "Kamome.full_transaction" do
       before do
-        Kamome.target = :blue
         begin
           Kamome.full_transaction do
-            Kamome.anchor(:green) do
-              User.create!(name: 'green')
-            end
-            User.create!(name: 'blue')
-            User.create!
+            Kamome.anchor(:blue)  { User.create!.articles.create!(:name => "x") }
+            Kamome.anchor(:green) { User.create!.articles.create!(:name => "x") }
+            raise ActiveRecord::ActiveRecordError
           end
-        rescue ActiveRecord::RecordInvalid
+        rescue
         end
       end
 
-      describe "confirm record count" do
-        it "=blue" do
-          Kamome.anchor(:blue)  { expect(model.count).to be 0 }
-        end
-
-        it "=green" do
-          Kamome.anchor(:green) { expect(model.count).to be 0 }
-        end
+      it "success" do
+        expect(User.count).to be 0
+        expect(Kamome.anchor(:blue)  { Article.count }).to be 0
+        expect(Kamome.anchor(:green) { Article.count }).to be 0
       end
     end
   end

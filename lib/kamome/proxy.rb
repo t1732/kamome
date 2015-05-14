@@ -18,6 +18,9 @@ module Kamome
       Class.new(ActiveRecord::Base).tap do |model|
         self.class.const_set(@model_name, model)
         model.establish_connection(Kamome.config.database_config.fetch(@target_key))
+        def model.target_key
+          name.demodulize.underscore.sub(/_connection_model/, "").to_sym
+        end
       end
     end
   end
