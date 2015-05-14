@@ -33,7 +33,9 @@ RSpec.configure do |config|
   config.before(:each) do
     %w(blue green).each do |name|
       ActiveRecord::Base.establish_connection(name.to_sym)
-      ActiveRecord::Base.connection.execute("DELETE FROM users;")
+      ActiveRecord::Base.connection.tables.each do |table|
+        ActiveRecord::Base.connection.execute("DELETE FROM #{table}")
+      end
     end
   end
 
