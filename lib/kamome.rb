@@ -67,15 +67,15 @@ module Kamome
   end
 
   # 水平分割用の全てのdatabaseでトランザクションを実行する
-  def full_transaction(&block)
+  def all_transaction(&block)
     nested_transaction(transaction_target_models(Kamome.config.shard_names), &block)
   end
 
   # マスターを含めて全てのdatabaseでトランザクションを実行する
-  def all_transaction(&block)
+  def full_transaction(&block)
     tagged("master transaction") do
       ActiveRecord::Base.transaction do
-        full_transaction(&block)
+        all_transaction(&block)
       end
     end
   end

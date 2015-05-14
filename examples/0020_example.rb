@@ -20,8 +20,8 @@
 # | Kamome.transaction(:blue)         | [2, 0, 1]  | 明示的に blue のみをロールバックさせた                                                        |
 # | Kamome.transaction(:green)        | [2, 1, 0]  | 明示的に green のみをロールバックさせた                                                       |
 # | Kamome.transaction(:blue, :green) | [2, 0, 0]  | 明示的に blue green の両方をロールバックさせた                                                |
-# | Kamome.full_transaction           | [2, 0, 0]  | 水平分割用のDBすべて (blue と green) をロールバックさせた                                     |
-# | Kamome.all_transaction            | [0, 0, 0]  | master を含め、水平分割用DBをロールバックさせた                                               |
+# | Kamome.all_transaction            | [2, 0, 0]  | 水平分割用のDBすべて (blue と green) をロールバックさせた                                     |
+# | Kamome.full_transaction           | [0, 0, 0]  | master を含め、水平分割用DBをロールバックさせた                                               |
 # |-----------------------------------+------------+-----------------------------------------------------------------------------------------------|
 
 require "bundler/setup"
@@ -112,8 +112,8 @@ Kamome.transaction                { code.call } rescue $!; counts.call # => [2, 
 Kamome.transaction(:blue)         { code.call } rescue $!; counts.call # => [2, 0, 1]
 Kamome.transaction(:green)        { code.call } rescue $!; counts.call # => [2, 1, 0]
 Kamome.transaction(:blue, :green) { code.call } rescue $!; counts.call # => [2, 0, 0]
-Kamome.full_transaction           { code.call } rescue $!; counts.call # => [2, 0, 0]
-Kamome.all_transaction            { code.call } rescue $!; counts.call # => [0, 0, 0]
+Kamome.all_transaction            { code.call } rescue $!; counts.call # => [2, 0, 0]
+Kamome.full_transaction           { code.call } rescue $!; counts.call # => [0, 0, 0]
 
 # >> Kamome: nil => :blue
 # >> Kamome: :blue => :blue

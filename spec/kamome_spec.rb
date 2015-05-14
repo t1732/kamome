@@ -153,11 +153,11 @@ describe Kamome do
       end
     end
 
-    describe "Kamome.full_transaction" do
+    describe "Kamome.all_transaction" do
       before do
         Kamome.target = :blue
         begin
-          Kamome.full_transaction do
+          Kamome.all_transaction do
             Kamome.anchor(:green) do
               model.create!(name: 'green')
             end
@@ -179,10 +179,10 @@ describe Kamome do
       end
     end
 
-    describe "Kamome.all_transaction" do
+    describe "Kamome.full_transaction" do
       before do
         begin
-          Kamome.all_transaction do
+          Kamome.full_transaction do
             Kamome.anchor(:blue)  { User.create!.articles.create!(:name => "x") }
             Kamome.anchor(:green) { User.create!.articles.create!(:name => "x") }
             raise ActiveRecord::ActiveRecordError
