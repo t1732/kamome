@@ -92,6 +92,13 @@ module Kamome
     end
   end
 
+  # コネクションを予め作成する
+  def create_all_connections
+    Kamome.config.shard_names.each do |name|
+      Ship.unload(name)
+    end
+  end
+
   private
 
   def transaction_target_models(target_key)

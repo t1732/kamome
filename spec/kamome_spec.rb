@@ -15,6 +15,14 @@ describe Kamome do
     expect(model.kamome_enable?).to be true
   end
 
+  it "should create all connectons" do
+    expect {
+      Kamome.create_all_connections
+    }.to change {
+      Kamome::Ship.instance.proxies.keys
+    }.from([]).to(["blue", "green"])
+  end
+
   context "switch target" do
     before do
       Kamome.anchor(:blue) { model.create!(name: 'blue') }
